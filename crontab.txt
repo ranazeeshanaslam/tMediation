@@ -1,0 +1,2 @@
+1,4,8,12,16,20,24,28,32,36,40,44,48,52,56,59 * * * * root /home/combilling/live_mediation/xip_parser.sh >/home/combilling/live_mediation/log/cron_xip.txt 2>&1
+1,4,8,12,16,20,24,28,32,36,40,44,48,52,56,59 * * * * root /home/combilling/live_mediation/ssw_parser.sh >/home/combilling/live_mediation/log/cron_ssw.txt 2>&1

@@ -1,0 +1,170 @@
+-- Drop existing table
+DROP TABLE PAR_TBLPARNODEIDENTI CASCADE CONSTRAINTS;
+
+-- Create the table with an Identity column
+CREATE TABLE PAR_TBLPARNODEIDENTI
+(
+  PNI_IDENTIFICATIONID     NUMBER(5) GENERATED ALWAYS AS IDENTITY, -- Identity column for auto-increment
+  PNI_IDENTIFICATIONVALUE  VARCHAR2(50 BYTE)    DEFAULT '' NOT NULL,
+  PN_PARTNERNODEID         NUMBER(10)           DEFAULT 0 NOT NULL,
+  PNIT_TYPEID              NUMBER(2)            DEFAULT 0 NOT NULL
+)
+TABLESPACE USERS
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            BUFFER_POOL      DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+CACHE;
+
+-- Create a unique index on PNI_IDENTIFICATIONVALUE
+CREATE UNIQUE INDEX PNI_IDENTIFICATIONVALUE_UNIQ ON PAR_TBLPARNODEIDENTI
+(PNI_IDENTIFICATIONVALUE)
+NOLOGGING
+TABLESPACE USERS
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            BUFFER_POOL      DEFAULT
+           )
+PARALLEL (DEGREE 4 INSTANCES 1);
+
+-- Add constraints for primary key and unique key
+ALTER TABLE PAR_TBLPARNODEIDENTI ADD (
+  CONSTRAINT PNI_IDENTIFICATIONVALUE_UNIQ
+  UNIQUE (PNI_IDENTIFICATIONVALUE)
+  USING INDEX PNI_IDENTIFICATIONVALUE_UNIQ
+  ENABLE VALIDATE
+);
+
+-- Add a foreign key constraint
+ALTER TABLE PAR_TBLPARNODEIDENTI ADD (
+  CONSTRAINT FK_PARTNERNODE_IDENT 
+  FOREIGN KEY (PN_PARTNERNODEID) 
+  REFERENCES PAR_TBLICPARTNERNODES (PN_PARTNERNODEID)
+  ENABLE VALIDATE);
+
+
+-- Drop existing table if it exists
+BEGIN
+   EXECUTE IMMEDIATE 'DROP TABLE PAR_TBLICPARTNERNODES CASCADE CONSTRAINTS';
+EXCEPTION
+   WHEN OTHERS THEN
+      IF SQLCODE != -942 THEN -- Ignore error if table does not exist
+         RAISE;
+      END IF;
+END;
+/
+
+-- Create the table with an Identity column
+CREATE TABLE PAR_TBLICPARTNERNODES
+(
+  PN_PARTNERNODEID     NUMBER(10) GENERATED ALWAYS AS IDENTITY, -- Identity column for auto-increment
+  PAR_PARTNERID        NUMBER(10)               NOT NULL,
+  PN_PARTNERNODEDESC   VARCHAR2(100 BYTE)       DEFAULT '',
+  PN_ISACTIVE          NUMBER(1)                NOT NULL,
+  CT_CHARGINGTYPEID    NUMBER(1)                DEFAULT 1                   NOT NULL,
+  NL_LOCATIONID        NUMBER(5),
+  PN_ROUTINGCONTEXT    VARCHAR2(64 BYTE),
+  PN_VOICECODECS       VARCHAR2(128 BYTE),
+  PN_CALLCAPACITY      NUMBER(5)                DEFAULT 0                   NOT NULL,
+  PN_PRIMARYPORT       NUMBER(5)                DEFAULT 0,
+  PN_NODENAME          VARCHAR2(100 BYTE),
+  PN_NODEPASSWORD      VARCHAR2(100 BYTE),
+  PN_CRYPTOPASSWORD    VARCHAR2(100 BYTE),
+  PN_PREFIX            VARCHAR2(100 BYTE),
+  PN_PRIMARYIP         VARCHAR2(100 BYTE),
+  PN_LOCKTYPE          NUMBER(2)                DEFAULT 0                   NOT NULL,
+  PN_CALLLEVEL         NUMBER(2)                DEFAULT 0                   NOT NULL,
+  PN_PRIOTITY          NUMBER(2)                DEFAULT 0                   NOT NULL,
+  PN_SWRATEFEEGROUPID  NUMBER(5)                DEFAULT 0                   NOT NULL,
+  PN_SWCUSTOMERID      NUMBER(5)                DEFAULT 0                   NOT NULL,
+  PN_SWGATEWAYID       NUMBER(5)                DEFAULT 0                   NOT NULL,
+  PN_ALLOWEDPREFIXES   VARCHAR2(200 BYTE),
+  PN_ASVENDOR          NUMBER(1)                DEFAULT 0                   NOT NULL
+)
+TABLESPACE USERS
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            BUFFER_POOL      DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+CACHE;
+
+-- Create a unique index on PN_PARTNERNODEID (auto-generated identity column)
+CREATE UNIQUE INDEX PK_PARTNERNODES ON PAR_TBLICPARTNERNODES
+(PN_PARTNERNODEID)
+NOLOGGING
+TABLESPACE USERS
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            BUFFER_POOL      DEFAULT
+           )
+PARALLEL (DEGREE 4 INSTANCES 1);
+
+-- Add a primary key constraint
+ALTER TABLE PAR_TBLICPARTNERNODES ADD (
+  CONSTRAINT PK_PARTNERNODES
+  PRIMARY KEY
+  (PN_PARTNERNODEID)
+  USING INDEX PK_PARTNERNODES
+  ENABLE VALIDATE);
+
+-- Since Identity column handles auto-increment, no need for the sequence and trigger
+-- Drop the old sequence if it exists
+BEGIN
+   EXECUTE IMMEDIATE 'DROP SEQUENCE SEQ_PAR_TBLPARTNERIDENTI';
+EXCEPTION
+   WHEN OTHERS THEN
+      IF SQLCODE != -2289 THEN -- Ignore error if sequence does not exist
+         RAISE;
+      END IF;
+END;
+/
+
+-- Remove trigger as it's no longer necessary with the Identity column
+BEGIN
+   EXECUTE IMMEDIATE 'DROP TRIGGER TRG_PAR_TBLPARTNERNODE';
+EXCEPTION
+   WHEN OTHERS THEN
+      IF SQLCODE != -4080 THEN -- Ignore error if trigger does not exist
+         RAISE;
+      END IF;
+END;
+/
+
+-- Add a foreign key constraint
+ALTER TABLE PAR_TBLICPARTNERNODES ADD (
+  CONSTRAINT FK_NODES_PARTNERS 
+  FOREIGN KEY (PAR_PARTNERID) 
+  REFERENCES PAR_TBLINTERCONNECTPARTNERS (PAR_PARTNERID)
+  ENABLE VALIDATE);

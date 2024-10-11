@@ -1,0 +1,22 @@
+[PropertyInfo]
+callednumber,String,false,false, , ,false,<default>
+callingID,String,false,false, , ,false,<default>
+callingnumber,String,false,false, , ,false,<default>
+callleg,int,false,false, , ,false,<default>
+confID,String,false,false, , ,false,<default>
+duration,int,false,false, , ,false,<default>
+nasipaddress,String,false,false, , ,false,<default>
+networkelement,int,false,false, , ,false,<default>
+obaccno,int,false,false, , ,false,<default>
+planID,int,false,false, , ,false,<default>
+recordno,long,false,false, , ,false,<default>
+remoteaddress,String,false,false, , ,false,<default>
+remotegatewayid,String,false,false, , ,true,<default>
+terminationcause,String,false,false, , ,false,<default>
+timeclose,String,false,false, , ,false,<default>
+username,String,false,false, , ,false,<default>
+[IconNames]
+
+
+
+

@@ -1,0 +1,26 @@
+truncate table SDR_TBLTELESC5CDRS
+/
+truncate table SDR_TBLTELESC5CDRS_Start
+/
+truncate table tmr_tblfilenames
+/
+truncate table SDR_TBLMEDCDRDUPLICATECHECK
+/
+truncate table SDR_TBLSubMissedCDRs 
+/
+truncate table SDR_TBlSUBCDRS 
+/ 
+truncate table SDR_TBlSUBzerodurCDRS 
+/
+
+
+truncate table SDR_TBLTELESSSWCDRS
+/
+truncate table SDR_TBLTELESSSWICDRS
+/
+truncate table tmr_tblfilenames
+/
+truncate table SDR_TBLMEDCDRDUPLICATECHECK
+/
+truncate table SDR_TBLICPMissedCDRs 
+/

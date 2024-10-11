@@ -1,0 +1,16 @@
+# Log files
+*.log
+# Properties files
+*.properties
+
+# Configuration Folder
+conf
+
+# Log folder
+alarms
+logs
+
+# DialogicSBC folders
+dialogic_cdrs_src
+dialogic_cdrs_dest
+

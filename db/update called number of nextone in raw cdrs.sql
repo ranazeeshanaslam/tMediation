@@ -1,0 +1,62 @@
+select DRI_IdentificationID, DR_DestRouteID, RP_ROUTEPREFIXID, PAR_PartnerID,  DRI_IP, DRI_TechPrefix from PAR_TBLDESTROUTEIDENT 
+
+alter table PAR_TBLDESTROUTEIDENT  add RP_ROUTEPREFIXID number(3) default 0 not null
+
+
+select substr('3857026014272348066540739', 1, 12) from dual
+
+select NE_ELEMENTID, NSSW_INCOMINGNODEID, NSSW_OUTGOINGNODEID,  NSSW_CALLEDPARTYFROMSRC, NSSW_CALLEDPARTYONDEST, 
+ substr(NSSW_CALLEDPARTYONDEST,8,length(NSSW_CALLEDPARTYONDEST)) as NEW_NSSW_CALLEDPARTYONDEST
+ from SDR_TBLNEXTONESSWCDRS where   NSSW_STARTTIME >= to_date('2014-11-27','YYYY-MM-DD') 
+ and NSSW_TCALLEDNUMBER like '+140221%'  -- and length(NSSW_TCALLEDNUMBER)>=23
+ and NSSW_RAWCDR_ID in (
+    select ICPMC_RAWCDRID from sdr_tblicpmissedcdrs where NE_ELEMENTID = 23
+ )
+
+------------------------------------- +140221-------------------------------------
+update  SDR_TBLNEXTONESSWCDRS set NSSW_CALLEDPARTYONDEST =substr(NSSW_CALLEDPARTYONDEST,8,length(NSSW_CALLEDPARTYONDEST))
+ where   NSSW_STARTTIME >= to_date('2014-11-27','YYYY-MM-DD') and NE_ELEMENTID = 23
+ and NSSW_TCALLEDNUMBER like '+140221%' 
+ and NSSW_RAWCDR_ID in (
+    select ICPMC_RAWCDRID from sdr_tblicpmissedcdrs where NE_ELEMENTID = 23
+ )
+
+update sdr_tblicpmissedcdrs set ICPMC_CALLEDNUMBER = substr(ICPMC_CALLEDNUMBER,8,length(ICPMC_CALLEDNUMBER))
+ where   ICPMC_EVENTTIME >= to_date('2014-11-27','YYYY-MM-DD') 
+ and ICPMC_CALLEDNUMBER like '+140221%'  and NE_ELEMENTID = 23
+
+--------------------- 385702----------------
+update  SDR_TBLNEXTONESSWCDRS set NSSW_CALLEDPARTYONDEST = substr(NSSW_CALLEDPARTYONDEST,1,6)||substr(NSSW_CALLEDPARTYONDEST,13,length(NSSW_CALLEDPARTYONDEST))
+ where   NSSW_STARTTIME >= to_date('2014-11-27','YYYY-MM-DD') and NE_ELEMENTID = 23
+ and NSSW_TCALLEDNUMBER like '385702%' and length(NSSW_TCALLEDNUMBER)>=23
+ and NSSW_RAWCDR_ID in (
+    select ICPMC_RAWCDRID from sdr_tblicpmissedcdrs where NE_ELEMENTID = 23
+ )
+
+update sdr_tblicpmissedcdrs set ICPMC_CALLEDNUMBER = substr(ICPMC_CALLEDNUMBER,1,6)||substr(ICPMC_CALLEDNUMBER,13,length(ICPMC_CALLEDNUMBER))
+ where   ICPMC_EVENTTIME >= to_date('2014-11-27','YYYY-MM-DD') 
+ and ICPMC_CALLEDNUMBER like '385702%' and length(ICPMC_CALLEDNUMBER)>=23 and NE_ELEMENTID = 23
+
+--------------------- 170914----------------
+update  SDR_TBLNEXTONESSWCDRS set NSSW_CALLEDPARTYONDEST = substr(NSSW_CALLEDPARTYONDEST,1,6)||substr(NSSW_CALLEDPARTYONDEST,13,length(NSSW_CALLEDPARTYONDEST))
+ where   NSSW_STARTTIME >= to_date('2014-11-27','YYYY-MM-DD') and NE_ELEMENTID = 23
+ and NSSW_TCALLEDNUMBER like '170914%' and length(NSSW_TCALLEDNUMBER)>=17
+ and NSSW_RAWCDR_ID in (
+    select ICPMC_RAWCDRID from sdr_tblicpmissedcdrs where NE_ELEMENTID = 23
+ )
+
+update sdr_tblicpmissedcdrs set ICPMC_CALLEDNUMBER = substr(ICPMC_CALLEDNUMBER,1,6)||substr(ICPMC_CALLEDNUMBER,13,length(ICPMC_CALLEDNUMBER))
+ where   ICPMC_EVENTTIME >= to_date('2014-11-27','YYYY-MM-DD') 
+ and ICPMC_CALLEDNUMBER like '170914%' and length(ICPMC_CALLEDNUMBER)>=17 and NE_ELEMENTID = 23
+ 
+--------------------- 548724----------------
+update  SDR_TBLNEXTONESSWCDRS set NSSW_CALLEDPARTYONDEST = substr(NSSW_CALLEDPARTYONDEST,1,6)||substr(NSSW_CALLEDPARTYONDEST,13,length(NSSW_CALLEDPARTYONDEST))
+ where   NSSW_STARTTIME >= to_date('2014-11-27','YYYY-MM-DD') and NE_ELEMENTID = 23
+ and NSSW_TCALLEDNUMBER like '548724%' and length(NSSW_TCALLEDNUMBER)>=22
+ and NSSW_RAWCDR_ID in (
+    select ICPMC_RAWCDRID from sdr_tblicpmissedcdrs where NE_ELEMENTID = 23
+ )
+
+update sdr_tblicpmissedcdrs set ICPMC_CALLEDNUMBER = substr(ICPMC_CALLEDNUMBER,1,6)||substr(ICPMC_CALLEDNUMBER,13,length(ICPMC_CALLEDNUMBER))
+ where   ICPMC_EVENTTIME >= to_date('2014-11-27','YYYY-MM-DD') 
+ and ICPMC_CALLEDNUMBER like '548724%' and length(ICPMC_CALLEDNUMBER)>=22 and NE_ELEMENTID = 23 
